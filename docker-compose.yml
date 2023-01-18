@@ -1,0 +1,22 @@
+version: "3.9"
+   
+services:
+  db:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - ./data/db:/root/db
+    environment:
+      - SQLITE3_DB=db.sqlite3
+  app:
+    build:
+      context: .
+    working_dir: /pyapps/dockinnqueue
+    volumes:
+      - ./app:/home/admdebian/pyapps
+    ports:
+      - "8080:8080"
+    command: sh -c "python3.10 manage.py runserver 0.0.0.0:8080"
+    environment:
+      - DEBUG=1
+    depends_on:
+      - db
